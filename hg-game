@@ -8,9 +8,9 @@ Signal.trap("INT") {
 
 def print_header
   puts "----------------------------------------------------------"
-  puts "                      THE GIT GAME                        "
+  puts "                      THE HG GAME                        "
   puts "----------------------------------------------------------"
-  puts "Welcome! The goal of the git game is to guess committers"
+  puts "Welcome! The goal of the hg game is to guess committers"
   puts "based on their commit messages.\n\n"
 end
 
@@ -18,8 +18,8 @@ def print_help
   puts "----------------------------------------------------------"
   puts "                          USAGE                           "
   puts "----------------------------------------------------------"
-  puts "git game [extra git log options]"
-  puts "EX: git game --after={2014-08-08}"
+  puts "hg game [extra hg log options]"
+  puts "EX: hg game --after={2014-08-08}"
   puts "(This script already uses --no-merges and --pretty."
   puts "For more valid options see: http://gitref.org/inspect/)"
 end

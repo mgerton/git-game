@@ -35,15 +35,15 @@ end
 COMMIT_DELIMITER = "XXXCOMMITXXX"
 FIELD_DELIMITER = "|||"
 
-commit_format = ["%an", "%ar", "%B"].join(FIELD_DELIMITER)
+commit_format = ["{author}", "{desc}"].join(FIELD_DELIMITER)
 
-raw_commits = `git log --no-merges --pretty="#{COMMIT_DELIMITER}#{commit_format}" #{input if input}`.split("#{COMMIT_DELIMITER}")
+raw_commits = `hg log -bdefault --template="#{COMMIT_DELIMITER}#{commit_format}" #{input if input}`.split("#{COMMIT_DELIMITER}")
 commits = []
 raw_commits.each do |c|
   next if c.strip.empty?
 
   fields = c.split(FIELD_DELIMITER)
-  commits << {:author => fields[0], :date => fields[1], :message => fields[2]}
+  commits << {:author => fields[0], :message => fields[1]}
 end
 
 committers = commits.map { |c| c[:author] }.compact.uniq
@@ -81,7 +81,6 @@ loop do
 
   next if message.nil? || message.empty? || author.nil? || author.empty?
 
-  puts "(#{commit[:date]})\n"
   puts "#{message.strip}\n\n"
   print "Who wrote it (current streak: #{streak})? "
 

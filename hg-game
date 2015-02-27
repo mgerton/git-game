@@ -6,6 +6,12 @@ Signal.trap("INT") {
   exit 0
 }
 
+def print_committers(committers)
+  committers.each do |committer|
+    puts committer
+  end
+end
+
 def print_header
   puts "----------------------------------------------------------"
   puts "                      THE HG GAME                        "
@@ -18,16 +24,27 @@ def print_help
   puts "----------------------------------------------------------"
   puts "                          USAGE                           "
   puts "----------------------------------------------------------"
-  puts "hg game [extra hg log options]"
+  puts "ruby hg-game /path/to/repo"
   puts "EX: hg game --after={2014-08-08}"
   puts "(This script already uses --no-merges and --pretty."
   puts "For more valid options see: http://gitref.org/inspect/)"
 end
 
+input = nil
+
 # -- Usage Text --
 if ARGV.count > 0 && (input = ARGV.shift) == 'help'
   print_header
   print_help
+  exit 0
+end
+
+if input == 'alias'
+  `alias hggame="ruby \`pwd\`/hg-game"`
+  print_header
+  puts
+  puts "You can now run in any repo with $> hggame"
+
   exit 0
 end
 
@@ -37,7 +54,9 @@ FIELD_DELIMITER = "|||"
 
 commit_format = ["{author}", "{desc}"].join(FIELD_DELIMITER)
 
-raw_commits = `hg log -bdefault --template="#{COMMIT_DELIMITER}#{commit_format}" #{input if input}`.split("#{COMMIT_DELIMITER}")
+cwd = (input.nil?) ? '.' : input
+
+raw_commits = `hg log -bdefault --template=\"#{COMMIT_DELIMITER}#{commit_format}\" #{input if input} --cwd=#{cwd}`.split("#{COMMIT_DELIMITER}")
 commits = []
 raw_commits.each do |c|
   next if c.strip.empty?
@@ -55,9 +74,7 @@ print_header
 puts "You're playing in a repo with #{commits.size} commits and #{committers.size}"
 puts "distinct committers.\n\n"
 
-committers.each do |committer|
-  puts committer
-end
+print_committers committers
 
 puts "\n"
 puts "When guessing, all you have to do is type part of the"
@@ -87,6 +104,13 @@ loop do
   guess = gets
 
   while guess.strip.empty?
+    print "Who wrote it (current streak: #{streak})? "
+    guess = gets
+  end
+
+  if guess.strip.downcase == 'list'
+    print_committers committers
+    puts "#{message.strip}\n\n"
     print "Who wrote it (current streak: #{streak})? "
     guess = gets
   end

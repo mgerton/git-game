@@ -10,9 +10,9 @@ The goal is to get the longest streak! (It's harder than you think...)
 
 ## How do I play?
 
-- [Download the `hg-game` executable](https://github.com/mgerton/hg-game/releases/tag/1.1)
-- Put it somewhere on your PATH (like `/usr/local/bin`)
-- Then, in any hg repository, run `hg game`
+- [Download the `hg-game` repo](https://github.com/panel/git-game/releases/tag/v1.2)
+- Run ruby hg-game alias
+- Then, in any hg repository, run `hggame`
 - (If you'd like, you can select a subset of commits, for example, `hg game --after={2014-08-08}`. For more options, see [http://hgbook.red-bean.com/read/customizing-the-output-of-mercurial.html](http://hgbook.red-bean.com/read/customizing-the-output-of-mercurial.html).)
 
 ## Requirements
